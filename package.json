@@ -1,0 +1,21 @@
+{
+  "name": "rbtv-api",
+  "version": "0.0.1",
+  "description": "RBTV API middleware",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.markhaehnel.de/mhaehnel/rbtv-api.git"
+  },
+  "author": "Mark Hähnel",
+  "license": "MIT",
+  "dependencies": {
+    "compression": "^1.6.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "rest": "^2.0.0"
+  }
+}
