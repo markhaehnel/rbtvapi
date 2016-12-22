@@ -1,7 +1,6 @@
 /* dependencies, dependencies, dependencies  */
 const express = require('express');
 const compression = require('compression');
-const cors = require('cors');
 const logger = require('./log');
 const api = require('./api');
 
@@ -12,7 +11,6 @@ const port = process.env.PORT || 8080;
 app.set('port', port);
 app.use(logger);
 app.use(compression());
-app.use(cors());
 
 /* routing */
 app.use('/', api);
