@@ -12,8 +12,14 @@ app.set('port', port);
 app.use(logger);
 app.use(compression());
 
+api.setAuthCredentials(process.env.APIKEY, process.env.APISECRET);
+
 /* routing */
-app.use('/', api);
+app.get('/schedule/current', (req, res) => {
+    api.get(req.path).then((response) => {
+        res.send(response.entity);
+    });
+});
 
 /* let's go' */
 app.listen(port, () => {
