@@ -12,7 +12,7 @@ app.set('port', port);
 app.use(logger);
 app.use(compression());
 
-api.setAuthCredentials(/*process.env.RBTVKEY, process.env.RBTVSECRET, process.env.YOUTUBEKEY*/);
+api.setAuthCredentials(process.env.RBTVKEY, process.env.RBTVSECRET, process.env.YOUTUBEKEY);
 
 /* routing */
 app.get('/schedule/current', (req, res) => {
