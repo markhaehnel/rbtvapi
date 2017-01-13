@@ -3,39 +3,15 @@ const mime = require('rest/interceptor/mime');
 const pathPrefix = require('rest/interceptor/pathPrefix');
 const crypto = require('crypto');
 
-const rbtvClient = rest.wrap(mime).wrap(pathPrefix, { prefix: 'https://api.rocketmgmt.de' });
-const youtubeClient = rest.wrap(mime).wrap(pathPrefix, { prefix: 'https://www.googleapis.com/youtube/v3' });
-//https://www.googleapis.com/youtube/v3/search?key=" . $apiKey . "&channelId=" . $channelId . "&part=snippet&order=date&eventType=live&type=video&maxResults=1
-let _rbtvKey;
-let _rbtvSecret;
-let _youtubeKey;
+const client = rest.wrap(mime).wrap(pathPrefix, { prefix: 'https://api.rocketmgmt.de' });
 
-module.exports.setAuthCredentials = (rbtvKey, rbtvSecret, youtubeKey) => {
-    validateCredentials(...[rbtvKey, rbtvSecret, youtubeKey]);
-    _rbtvKey = rbtvKey;
-    _rbtvSecret = rbtvSecret;
-    _youtubeKey = youtubeKey;
-}
+let _rbtvKey = process.env.RBTVKEY;
+let _rbtvSecret = process.env.RBTVSECRET;
 
 module.exports.get = (endpoint) => {
-    return rbtvClient({
+    return client({
         path: endpoint,
         headers: generateAuthHeader(_rbtvKey, _rbtvSecret)
-    });
-}
-
-module.exports.getVideoUrl = () => {
-    return youtubeClient({
-        path: "search",
-        params: {
-            "key": _youtubeKey,
-            "channelId": "***REMOVED***",
-            "part": "snippet",
-            "order": "date",
-            "eventType": "live",
-            "type": "video",
-            "maxResults": 1
-        }
     });
 }
 

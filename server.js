@@ -1,27 +1,23 @@
 /* dependencies, dependencies, dependencies  */
 const express = require('express');
 const compression = require('compression');
-const logger = require('./log');
-const api = require('./api');
+const log = require('./middleware/log');
+const contentType = require('./middleware/contentType');
+const streamRouter = require('./router/streamRouter');
+const scheduleRouter = require('./router/scheduleRouter');
 
 const app = express();
 
-/* app configuration */
-const port = process.env.PORT || 8080;
-app.set('port', port);
-app.use(logger);
+/* middlewares */
+app.use(log);
+app.use(contentType)
 app.use(compression());
 
-api.setAuthCredentials(process.env.RBTVKEY, process.env.RBTVSECRET, process.env.YOUTUBEKEY);
-
 /* routing */
-app.get('/schedule/current', (req, res) => {
-    api.get(req.path).then((response) => {
-        res.send(response.entity);
-    });
-});
+app.use('/schedule', scheduleRouter);
+app.use('/stream', streamRouter);
 
-/* let's go' */
-app.listen(port, () => {
-    console.log('rbtv-api listening on port %d...', port);
+/* let's go */
+app.listen(process.env.PORT || 8080, () => {
+    console.log('RBTV API listening on port %d...', process.env.PORT || 8080);
 });
