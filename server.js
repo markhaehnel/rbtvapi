@@ -8,6 +8,8 @@ const scheduleRouter = require('./router/scheduleRouter');
 
 const app = express();
 
+app.disable('x-powered-by');
+
 /* middlewares */
 app.use(log);
 app.use(contentType)

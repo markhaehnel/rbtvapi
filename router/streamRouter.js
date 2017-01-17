@@ -1,9 +1,12 @@
 const express = require('express');
+const apicache = require('apicache');
 const youtube = require('../api/youtube');
 
-const router = express.Router();
 
-router.get('/', function (req, res) {
+const router = express.Router();
+const cache = apicache.middleware;
+
+router.get('/', cache('2 minutes', req => req.statusCode === 200), (req, res) => {
     Promise.all([youtube.getVideoId(), youtube.getViewerCount()])
     .then((results) => 
     {
@@ -14,16 +17,16 @@ router.get('/', function (req, res) {
                 'error': null
             });
         } else {
-            doError(res);
+            doError(404, res);
         }
     })
     .catch(() => {
-        doError(res);  
+        doError(500, res);
     });
 });
 
-const doError = (res) => {
-    res.status(400).send({
+const doError = (errorCode, res) => {
+    res.status(errorCode).send({
         'videoId': null,
         'viewerCount': null,
         'error': 'Can\'t get video id or viewer count'

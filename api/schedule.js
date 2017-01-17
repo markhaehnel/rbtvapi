@@ -3,14 +3,21 @@ const mime = require('rest/interceptor/mime');
 const pathPrefix = require('rest/interceptor/pathPrefix');
 const crypto = require('crypto');
 
-const client = rest.wrap(mime).wrap(pathPrefix, { prefix: 'https://api.rocketmgmt.de' });
+const client = rest.wrap(mime).wrap(pathPrefix, { prefix: 'https://api.rocketmgmt.de/schedule' });
 
 let _rbtvKey = process.env.RBTVKEY;
 let _rbtvSecret = process.env.RBTVSECRET;
 
-module.exports.get = (endpoint) => {
+module.exports.getCurrentShow = () => {
     return client({
-        path: endpoint,
+        path: '/current',
+        headers: generateAuthHeader(_rbtvKey, _rbtvSecret)
+    });
+}
+
+module.exports.getNextNShows = (n) => {
+    return client({
+        path:`/next/${n}`,
         headers: generateAuthHeader(_rbtvKey, _rbtvSecret)
     });
 }
