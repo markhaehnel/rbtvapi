@@ -3,8 +3,8 @@ const express = require('express');
 const compression = require('compression');
 const log = require('./middleware/log');
 const contentType = require('./middleware/contentType');
-const streamRouter = require('./router/streamRouter');
 const scheduleRouter = require('./router/scheduleRouter');
+const streamRouter = require('./router/streamRouter');
 
 const app = express();
 

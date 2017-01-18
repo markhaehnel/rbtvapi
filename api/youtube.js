@@ -1,18 +1,17 @@
-const rest = require('rest');
-const mime = require('rest/interceptor/mime');
-const pathPrefix = require('rest/interceptor/pathPrefix');
+const axios = require('axios');
 
-const youtubeClient = rest.wrap(mime).wrap(pathPrefix, { prefix: 'https://www.googleapis.com/youtube/v3' });
-
-let _youtubeKey = process.env.YOUTUBEKEY;
-let _youtubeChannelId = process.env.YOUTUBECHANNELID;
+const client = axios.create({
+    baseURL: 'https://www.googleapis.com/youtube/v3/',
+    validateStatus: (status) => { return status === 200; },
+    params: {
+        'key': process.env.YOUTUBEKEY,
+        'channelId': process.env.YOUTUBECHANNELID
+    }
+});
 
 module.exports.getVideoId = () => {
-    return youtubeClient({
-        path: 'search',
+    return client.get('/search', {
         params: {
-            'key': _youtubeKey,
-            'channelId': _youtubeChannelId,
             'part': 'snippet',
             'order': 'date',
             'eventType': 'live',
@@ -23,12 +22,9 @@ module.exports.getVideoId = () => {
 }
 
 module.exports.getViewerCount = () => {
-    return youtubeClient({
-        path: 'videos',
+    return client.get('/videos', {
         params: {
-            'key': _youtubeKey,
             'part': 'liveStreamingDetails',
-            'channelId': _youtubeChannelId,
             'maxResults': 1
         }
     });

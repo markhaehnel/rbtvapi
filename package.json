@@ -4,7 +4,7 @@
   "description": "RBTV API middleware",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "server": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -14,8 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "apicache": "^0.8.1",
+    "axios": "^0.15.3",
     "compression": "^1.6.2",
-    "express": "^4.14.0",
-    "rest": "^2.0.0"
+    "express": "^4.14.0"
   }
 }

@@ -13,22 +13,12 @@ router.get('/next/:count', (req, res) => {
 
 const handleApiResult = (apiCall, res) => {
     apiCall.then((result) => {
-        if (result.status.code === 200) {
-            res.status(200).send(result.entity);
-        } else {
-            doError(result.status.code);
-        }
+        res.status(200).send(result.data);
     })
-    .catch(() => {
-        doError(500, res);
-    });
-};
-
-const doError = (errorCode, res) => {
-    res.status(errorCode).send({
-        'videoId': null,
-        'viewerCount': null,
-        'error': 'Can\'t get video id or viewer count'
+    .catch((err) => {
+        res.status(500).send({
+            'error': 'Can not get schedule'
+        });
     });
 };
 

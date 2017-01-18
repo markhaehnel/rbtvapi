@@ -1,28 +1,27 @@
-const rest = require('rest');
-const mime = require('rest/interceptor/mime');
-const pathPrefix = require('rest/interceptor/pathPrefix');
+const axios = require('axios');
 const crypto = require('crypto');
 
-const client = rest.wrap(mime).wrap(pathPrefix, { prefix: 'https://api.rocketmgmt.de/schedule' });
+const client = axios.create({
+    baseURL: 'https://api.rocketmgmt.de/schedule/',
+    validateStatus: (status) => { return status === 200; }
+});
 
-let _rbtvKey = process.env.RBTVKEY;
-let _rbtvSecret = process.env.RBTVSECRET;
+client.interceptors.request.use((config) => {
+    config.headers = Object.assign(config.headers, generateAuthHeaders(process.env.RBTVKEY, process.env.RBTVSECRET));
+    return config;
+});
 
 module.exports.getCurrentShow = () => {
-    return client({
-        path: '/current',
-        headers: generateAuthHeader(_rbtvKey, _rbtvSecret)
-    });
+    return client.get('/current');
 }
 
 module.exports.getNextNShows = (n) => {
-    return client({
-        path:`/next/${n}`,
-        headers: generateAuthHeader(_rbtvKey, _rbtvSecret)
-    });
+    return client.get(`/next/${n}`);
 }
 
-const generateAuthHeader = (user, salt) => {
+function generateAuthHeaders(user, salt) {
+    validateCredentials(user, salt);
+
     let id = '00000000-0000-0000-0000-000000000000';
     let created = new Date().toISOString();
     let nonce = id + created + rand(10).trim();
@@ -37,19 +36,19 @@ const generateAuthHeader = (user, salt) => {
     return authHeaders;
 }
 
-const rand = function(num) {
+function rand(num) {
     return Math.random().toString(36).slice(num);
 };
 
-const base64encode = function(str) {
+function base64encode(str) {
     return new Buffer(str).toString('base64');
 };
 
-const sha1hex = (str) => {
+function sha1hex(str) {
     return crypto.createHash('sha1').update(str).digest('hex');
 }
 
-const validateCredentials = (...credentials) => {
+function validateCredentials (...credentials) {
     credentials.forEach((value) => {
         if (! (value && value.trim()) ) {
             throw new Error('Auth credentials need to be set.');
