@@ -1,5 +1,6 @@
 const axios = require('axios');
 const crypto = require('crypto');
+const chalk = require('chalk');
 
 const client = axios.create({
     baseURL: 'https://api.rocketmgmt.de/schedule/',
@@ -7,9 +8,13 @@ const client = axios.create({
 });
 
 client.interceptors.request.use((config) => {
-    config.headers = Object.assign(config.headers, generateAuthHeaders(process.env.RBTVKEY, process.env.RBTVSECRET));
+    config.headers = Object.assign(config.headers, generateAuthHeaders(_user, _salt));
     return config;
 });
+
+const _user = process.env.RBTVKEY;
+const _salt = process.env.RBTVSECRET;
+validateCredentials(_user, _salt);
 
 module.exports.getCurrentShow = () => {
     return client.get('/current');
@@ -20,8 +25,6 @@ module.exports.getNextNShows = (n) => {
 }
 
 function generateAuthHeaders(user, salt) {
-    validateCredentials(user, salt);
-
     let id = '00000000-0000-0000-0000-000000000000';
     let created = new Date().toISOString();
     let nonce = id + created + rand(10).trim();
@@ -51,7 +54,9 @@ function sha1hex(str) {
 function validateCredentials (...credentials) {
     credentials.forEach((value) => {
         if (! (value && value.trim()) ) {
-            throw new Error('Auth credentials need to be set.');
+            var message = 'Auth credentials need to be set.'
+            console.error(chalk.red(message));
+            throw new Error(message);
         }
     });
 }
