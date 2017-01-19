@@ -1,7 +1,6 @@
 require('newrelic');
 
 const express = require('express');
-const compression = require('compression');
 const log = require('morgan');
 const apicache = require('apicache');
 const contentType = require('./middleware/contentType');
@@ -17,7 +16,6 @@ app.disable('x-powered-by');
 app.use(log('combined')); //Logging
 app.use(cache('2 minutes'));
 app.use(contentType)
-app.use(compression());
 
 /* routing */
 app.use('/schedule', scheduleRouter);
