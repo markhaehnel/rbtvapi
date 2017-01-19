@@ -1,7 +1,8 @@
 /* dependencies, dependencies, dependencies  */
+const newrelic = require('newrelic');
 const express = require('express');
 const compression = require('compression');
-const log = require('./middleware/log');
+const log = require('morgan');
 const contentType = require('./middleware/contentType');
 const scheduleRouter = require('./router/scheduleRouter');
 const streamRouter = require('./router/streamRouter');
@@ -11,7 +12,7 @@ const app = express();
 app.disable('x-powered-by');
 
 /* middlewares */
-app.use(log);
+app.use(log('combined')); //Logging
 app.use(contentType)
 app.use(compression());
 
