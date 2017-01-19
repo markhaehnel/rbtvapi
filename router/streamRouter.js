@@ -1,11 +1,9 @@
 const express = require('express');
-const apicache = require('apicache');
 const youtube = require('../api/youtube');
 
 const router = express.Router();
-const cache = apicache.middleware;
 
-router.get('/', cache('2 minutes'), (req, res) => {
+router.get('/', (req, res) => {
     
     Promise.all([youtube.getVideoId(), youtube.getViewerCount()])
     .then((results) => 
