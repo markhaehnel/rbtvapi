@@ -13,5 +13,5 @@ export YOUTUBEKEY=XXXXXXXXXXXXXXXX #YouTube Data API v3 secret
 export YOUTUBECHANNELID=XXXXXXXXXXXXXXXX #YouTube Channel ID of RBTV
 
 # Start the api server
-yarn run start # or 'npm run server'
+yarn start # or 'npm start'
 ```
