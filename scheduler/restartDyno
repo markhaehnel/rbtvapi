@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+const Heroku = require('heroku-client');
+const heroku = new Heroku({ token: process.env.HEROKU_API_TOKEN });
+
+heroku.delete('/apps/rbtvapi/dynos/web');

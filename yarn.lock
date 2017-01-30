@@ -180,6 +180,13 @@ has-ansi@^2.0.0:
   dependencies:
     ansi-regex "^2.0.0"
 
+heroku-client@^3.0.0-beta3:
+  version "3.0.0-beta3"
+  resolved "https://registry.yarnpkg.com/heroku-client/-/heroku-client-3.0.0-beta3.tgz#ab6e789be4284ee8188da7bafd19b6cd2c94c27a"
+  dependencies:
+    is-retry-allowed "^1.0.0"
+    tunnel-agent "^0.4.0"
+
 http-errors@~1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.5.1.tgz#788c0d2c1de2c81b9e6e8c01843b6b97eb920750"
@@ -203,6 +210,10 @@ inherits@2.0.3, inherits@^2.0.3, inherits@~2.0.1:
 ipaddr.js@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.2.0.tgz#8aba49c9192799585bdd643e0ccb50e8ae777ba4"
+
+is-retry-allowed@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-1.1.0.tgz#11a060568b67339444033d0125a61a20d564fb34"
 
 isarray@0.0.1:
   version "0.0.1"
@@ -381,6 +392,10 @@ strip-ansi@^3.0.0:
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
+
+tunnel-agent@^0.4.0:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.4.3.tgz#6373db76909fe570e08d73583365ed828a74eeeb"
 
 type-is@~1.6.13:
   version "1.6.14"
