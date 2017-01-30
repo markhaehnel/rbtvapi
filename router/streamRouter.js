@@ -5,22 +5,36 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     
-    Promise.all([youtube.getVideoId(), youtube.getViewerCount()])
-    .then((results) => 
-    {
-        res.status(200).send({
-            'videoId': results[0].items[0].id.videoId,
-            'viewerCount': results[1].items[0].liveStreamingDetails.concurrentViewers,
-            'error': null
+    let resObject = {
+        'videoId': null,
+        'viewerCount': null,
+        'error': null
+    }
+
+    youtube.getVideoId()
+    .then((result) => {
+        resObject.videoId = result.data.items[0].id.videoId;
+        
+        youtube.getViewerCount(resObject.videoId)
+        .then((result) => {
+            resObject.viewerCount = result.data.items[0].liveStreamingDetails.concurrentViewers;
+            sendResponse(res, resObject);
+        })
+        .catch(() => {
+            resObject.error = "Can not get viewer count";
+            sendResponse(res, resObject);
+            
         });
     })
     .catch(() => {
-        res.status(500).send({
-            'videoId': null,
-            'viewerCount': null,
-            'error': 'Can not get video id or viewer count'
-        });
+        resObject.error = "Can not get video id";
+        sendResponse(res, resObject);
     });
+
 });
+
+function sendResponse(res, resObject) {
+    res.status(resObject.error ? 500 : 200).send(resObject);
+}
 
 module.exports = router;

@@ -21,10 +21,11 @@ module.exports.getVideoId = () => {
     });
 }
 
-module.exports.getViewerCount = () => {
+module.exports.getViewerCount = (videoId) => {
     return client.get('/videos', {
         params: {
             'part': 'liveStreamingDetails',
+            'id': videoId,
             'maxResults': 1
         }
     });
