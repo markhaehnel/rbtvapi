@@ -15,7 +15,7 @@ const handleApiResult = (apiCall, res) => {
     apiCall.then((result) => {
         res.status(200).send(result.data);
     })
-    .catch((err) => {
+    .catch(() => {
         res.status(500).send({
             'error': 'Can not get schedule'
         });
