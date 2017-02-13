@@ -1,4 +1,4 @@
-image: node:6
+image: node:6-alpine
 
 cache:
   paths:
@@ -6,6 +6,6 @@ cache:
 
 lint:
   script:
-   - npm install -g yarn
+   - npm install -g yarn >/dev/null
    - yarn
    - npm run lint
