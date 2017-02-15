@@ -8,6 +8,7 @@
     "url": "https://git.markhaehnel.de/mhaehnel/rbtv-api.git"
   },
   "scripts": {
+    "start": "node --harmony server.js",
     "dev": "cross-env NODE_ENV=development node server.js",
     "lint": "./node_modules/.bin/eslint --ext .js ./"
   },
@@ -26,5 +27,8 @@
     "eslint": "^3.14.0",
     "eslint-config-airbnb-base": "11.0.1",
     "eslint-plugin-import": "^2.2.0"
+  },
+  "engines": {
+    "node": "^7.x"
   }
 }

@@ -1,6 +1,9 @@
 # rbtvapi
 Publishes stream and schedule infos.
 
+## Requirements
+Node 7.5+ with ```--harmony``` flag set.
+
 ## Usage
 ```bash
 # Download dependencies
