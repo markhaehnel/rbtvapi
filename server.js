@@ -15,13 +15,12 @@ const cache = apicache.middleware;
 app.disable('x-powered-by');
 
 /* middlewares */
-app.use(log('combined')); //Logging
-app.use(cache('2 minutes'));
-app.use(contentType)
+app.use(log('combined'));
+app.use(contentType);
 
 /* routing */
-app.use('/schedule', scheduleRouter);
-app.use('/stream', streamRouter);
+app.use('/schedule', cache('2 minutes'), scheduleRouter);
+app.use('/stream', cache('5 minutes'), streamRouter);
 app.use('*', (res, req) => {
     req.status(404).send({
         error: "Endpoint not found."

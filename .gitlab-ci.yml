@@ -1,4 +1,4 @@
-image: node:6-alpine
+image: node:7-alpine
 
 cache:
   paths:
