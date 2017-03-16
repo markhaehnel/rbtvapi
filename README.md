@@ -1,4 +1,6 @@
 # rbtvapi
+[![build status](https://gitlab.com/mhaehnel/rbtvapi/badges/master/build.svg)](https://gitlab.com/mhaehnel/rbtvapi/commits/master)
+
 Publishes stream and schedule infos.
 
 ## Requirements
