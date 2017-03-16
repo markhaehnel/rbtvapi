@@ -4,13 +4,11 @@ if (process.env.NODE_ENV !== 'development') {
 
 const express = require('express');
 const log = require('morgan');
-const apicache = require('apicache');
 const contentType = require('./middleware/contentType');
 const scheduleRouter = require('./router/scheduleRouter');
 const streamRouter = require('./router/streamRouter');
 
 const app = express();
-const cache = apicache.middleware;
 
 app.disable('x-powered-by');
 
@@ -19,8 +17,8 @@ app.use(log('combined'));
 app.use(contentType);
 
 /* routing */
-app.use('/schedule', cache('2 minutes'), scheduleRouter);
-app.use('/stream', cache('5 minutes'), streamRouter);
+app.use('/schedule', scheduleRouter);
+app.use('/stream', streamRouter);
 app.use('*', (res, req) => {
     req.status(404).send({
         error: "Endpoint not found."

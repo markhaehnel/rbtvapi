@@ -1,28 +1,43 @@
 const express = require('express');
 const youtube = require('../api/youtube');
+const cacheManager = require('cache-manager');
 
+const memoryCache = cacheManager.caching({ store: 'memory', max: 1, ttl: 300 });
 const router = express.Router();
 
 router.get('/', getStreamInfo);
 
-async function getStreamInfo(req, res) {
-    let resObject = {
-        'videoId': null,
-        'viewerCount': null,
-        'error': null
-    }
+function getStreamInfo(req, res) {
+    memoryCache.wrap('stream_current', () => {
+        return getStreamData();
+    })
+    .then((data) => {
+        res.status(200).send(data);
+    })
+    .catch((e) => {
+        let errResult = { 'error': e };
+        res.status(500).send(errResult);
+    });
+}
 
-    try {
-        let videoIdResult = await youtube.getVideoId();
-        resObject.videoId = videoIdResult.data.items[0].id.videoId;
+function getStreamData() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let result = {};
 
-        let viewerCountResult = await youtube.getViewerCount(resObject.videoId);
-        resObject.viewerCount = viewerCountResult.data.items[0].liveStreamingDetails.concurrentViewers;
-    } catch(err) {
-        resObject.error = 'Can not get videoId or viewerCount';
-    }
+            let videoIdResult = await youtube.getVideoId();
+            result.videoId = videoIdResult.data.items[0].id.videoId;
 
-    res.status(resObject.error ? 500 : 200).send(resObject);
+            let viewerCountResult = await youtube.getViewerCount(result.videoId);
+            result.viewerCount = viewerCountResult.data.items[0].liveStreamingDetails.concurrentViewers;
+
+            result.error = null;
+
+            resolve(result);
+        } catch(err) {
+            reject('Can not get videoId or viewerCount');
+        }
+    });
 }
 
 module.exports = router;
