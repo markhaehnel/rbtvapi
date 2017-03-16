@@ -6,6 +6,5 @@ cache:
 
 lint:
   script:
-   - npm install -g yarn >/dev/null
    - yarn
-   - npm run lint
+   - yarn run lint
