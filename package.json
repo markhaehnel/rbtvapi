@@ -1,7 +1,7 @@
 {
-  "name": "rbtv-api",
-  "version": "0.0.2",
-  "description": "RBTV API middleware",
+  "name": "rbtvapi",
+  "version": "1.0.0",
+  "description": "RBTV API server with caching",
   "main": "server.js",
   "repository": {
     "type": "git",
