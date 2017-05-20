@@ -9,14 +9,14 @@ const client = axios.create({
     }
 });
 
-module.exports.getVideoId = () => {
+module.exports.getCameras = () => {
     return client.get('/search', {
         params: {
             'part': 'snippet',
-            'order': 'date',
+            'order': 'viewCount',
             'eventType': 'live',
             'type': 'video',
-            'maxResults': 1
+            'maxResults': '25'
         }
     });
 }

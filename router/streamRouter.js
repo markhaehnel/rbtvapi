@@ -23,15 +23,24 @@ function getStreamInfo(req, res) {
 function getStreamData() {
     return new Promise(async (resolve, reject) => {
         try {
-            let result = {};
+            let result = {
+                cameras: [],
+                error: null
+            };
 
-            let videoIdResult = await youtube.getVideoId();
-            result.videoId = videoIdResult.data.items[0].id.videoId;
+            let videoIdsResult = await youtube.getCameras();
 
-            let viewerCountResult = await youtube.getViewerCount(result.videoId);
+            videoIdsResult.data.items.forEach((element) => {
+                result.cameras.push(element.id.videoId);
+                console.log(element.id.videoId + " " + element.snippet.title);
+            });
+
+
+            let viewerCountResult = await youtube.getViewerCount(result.cameras[0]);
             result.viewerCount = viewerCountResult.data.items[0].liveStreamingDetails.concurrentViewers;
 
-            result.error = null;
+            // for versions 3.7.3 and earlier
+            result.videoId = result.cameras[0];
 
             resolve(result);
         } catch(err) {
