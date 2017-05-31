@@ -4,7 +4,7 @@
 Publishes stream and schedule infos.
 
 ## Requirements
-Node 7.5+ with ```--harmony``` flag set.
+- Node.js v8+
 
 ## Usage
 ```bash
