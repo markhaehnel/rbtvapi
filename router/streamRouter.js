@@ -1,5 +1,6 @@
 const express = require('express');
 const youtube = require('../api/youtube');
+const twitch = require('../api/twitch');
 const cacheManager = require('cache-manager');
 
 const memoryCache = cacheManager.caching({ store: 'memory', max: 1, ttl: 300 });
@@ -36,8 +37,15 @@ function getStreamData() {
             });
 
 
-            let viewerCountResult = await youtube.getViewerCount(result.cameras[0]);
-            result.viewerCount = viewerCountResult.data.items[0].liveStreamingDetails.concurrentViewers;
+            let [youtubeViewerResult, twitchViewerResult] = await Promise.all([
+                await youtube.getViewerCount(result.cameras[0]),
+                await twitch.getViewerCount()
+            ]);
+
+            let ytViewerCount = youtubeViewerResult.data.items[0].liveStreamingDetails.concurrentViewers;
+            let twitchViewerCount = twitchViewerResult.data.stream.viewers;
+
+            result.viewerCount = parseInt(ytViewerCount) + parseInt(twitchViewerCount);
 
             // for versions 3.7.3 and earlier
             result.videoId = result.cameras[0];
