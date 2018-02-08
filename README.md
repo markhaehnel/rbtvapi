@@ -4,7 +4,7 @@
 Publishes stream and schedule infos.
 
 ## Requirements
-- Node.js v8+
+- Node.js v9+
 
 ## Usage
 ```bash
