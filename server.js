@@ -5,6 +5,7 @@ if (process.env.NODE_ENV !== 'development') {
 const express = require('express');
 const log = require('morgan');
 const contentType = require('./middleware/contentType');
+const cacheControl = require('./middleware/cacheControl');
 const scheduleRouter = require('./router/scheduleRouter');
 const streamRouter = require('./router/streamRouter');
 
@@ -15,6 +16,7 @@ app.disable('x-powered-by');
 /* middlewares */
 app.use(log('combined'));
 app.use(contentType);
+app.use(cacheControl);
 
 /* routing */
 app.use('/schedule', scheduleRouter);
