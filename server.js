@@ -1,5 +1,9 @@
 if (process.env.NODE_ENV !== 'development') {
-  require('newrelic')
+  require('dd-trace').init({
+    service: 'rbtvapi',
+    hostname: 'dd-agent',
+    port: 8126
+  })
 }
 
 const express = require('express')
