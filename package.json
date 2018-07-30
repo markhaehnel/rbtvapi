@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "cross-env NODE_ENV=development node server.js",
-    "lint": "./node_modules/.bin/eslint --ext .js ./"
+    "lint": "standard | snazzy"
   },
   "author": "Mark Hähnel",
   "license": "MIT",
@@ -20,13 +20,12 @@
     "chalk": "^2.4.1",
     "express": "^4.16.3",
     "morgan": "^1.9.0",
-    "newrelic": "^4.1.5"
+    "newrelic": "^4.6.0"
   },
   "devDependencies": {
-    "cross-env": "^5.1.6",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "11.2.0",
-    "eslint-plugin-import": "^2.3.0"
+    "cross-env": "^5.2.0",
+    "snazzy": "^7.1.1",
+    "standard": "^11.0.1"
   },
   "engines": {
     "node": "^10.x"
