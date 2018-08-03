@@ -9,7 +9,7 @@ let stream = {}
 
 router.get('/', (req, res) => res.status(200).send(stream))
 
-let jobStream = new CronJob({
+new CronJob({
   cronTime: '*/2 * * * *',
   onTick: async () => {
     try {

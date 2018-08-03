@@ -7,7 +7,7 @@ const router = express.Router()
 let currentShow = {}
 let next5Shows = {}
 
-let jobCurrentShow = new CronJob({
+new CronJob({
   cronTime: '*/2 * * * *',
   onTick: async () => {
     try {
@@ -21,7 +21,7 @@ let jobCurrentShow = new CronJob({
   runOnInit: true
 })
 
-let jobNext5Shows = new CronJob({
+new CronJob({
   cronTime: '*/2 * * * *',
   onTick: async () => {
     try {
@@ -36,6 +36,6 @@ let jobNext5Shows = new CronJob({
 })
 
 router.get('/current', (req, res) => res.status(200).send(currentShow))
-router.get('/next/5',  (req, res) => res.status(200).send(next5Shows))
+router.get('/next/5', (req, res) => res.status(200).send(next5Shows))
 
 module.exports = router
