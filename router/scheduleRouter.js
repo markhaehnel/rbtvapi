@@ -7,7 +7,7 @@ const router = express.Router()
 let currentShow = {}
 let next5Shows = {}
 
-new CronJob({
+let jobCurrentShow = new CronJob({
   cronTime: '*/2 * * * *',
   onTick: async () => {
     try {
@@ -17,11 +17,10 @@ new CronJob({
       console.error('Error while updating currentShow', err)
     }
   },
-  start: true,
   runOnInit: true
 })
 
-new CronJob({
+let jobNext5Shows = new CronJob({
   cronTime: '*/2 * * * *',
   onTick: async () => {
     try {
@@ -31,9 +30,11 @@ new CronJob({
       console.error('Error while updating next5Shows', err)
     }
   },
-  start: true,
   runOnInit: true
 })
+
+jobCurrentShow.start()
+jobNext5Shows.start()
 
 router.get('/current', (req, res) => res.status(200).send(currentShow))
 router.get('/next/5', (req, res) => res.status(200).send(next5Shows))

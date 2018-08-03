@@ -9,7 +9,7 @@ let stream = {}
 
 router.get('/', (req, res) => res.status(200).send(stream))
 
-new CronJob({
+let jobStream = new CronJob({
   cronTime: '*/2 * * * *',
   onTick: async () => {
     try {
@@ -18,9 +18,9 @@ new CronJob({
       console.error('Error while updating stream info', err)
     }
   },
-  start: true,
   runOnInit: true
 })
+jobStream.start()
 
 function getStreamData () {
   return new Promise(async (resolve, reject) => {
