@@ -1,35 +1,41 @@
 const express = require('express')
 const schedule = require('../api/schedule')
-const cacheManager = require('cache-manager')
+const CronJob = require('cron').CronJob
 
-const memoryCache = cacheManager.caching({ store: 'memory', max: 1, ttl: 120 })
 const router = express.Router()
 
-router.get('/current', getCurrentShow)
-router.get('/next/:count', (req, res) => getNextNShows(res, req.params.count))
+let currentShow = {}
+let next5Shows = {}
 
-function getCurrentShow (req, res) {
-  memoryCache.wrap('schedule_current', () => {
-    return schedule.getCurrentShow()
-  })
-    .then((result) => {
-      res.status(200).send(result.data)
-    })
-    .catch(() => {
-      res.status(500).send({ 'error': 'Can not get current show' })
-    })
-}
+let jobCurrentShow = new CronJob({
+  cronTime: '*/2 * * * *',
+  onTick: async () => {
+    try {
+      let { data } = await schedule.getCurrentShow()
+      currentShow = data
+    } catch (err) {
+      console.error('Error while updating currentShow', err)
+    }
+  },
+  start: true,
+  runOnInit: true
+})
 
-function getNextNShows (res, count) {
-  memoryCache.wrap(`schedule_next_${count}`, () => {
-    return schedule.getNextNShows(count)
-  })
-    .then((result) => {
-      res.status(200).send(result.data)
-    })
-    .catch(() => {
-      res.status(500).send({ 'error': `Can not get next ${count} show(s)` })
-    })
-}
+let jobNext5Shows = new CronJob({
+  cronTime: '*/2 * * * *',
+  onTick: async () => {
+    try {
+      let { data } = await schedule.getNextNShows(5)
+      next5Shows = data
+    } catch (err) {
+      console.error('Error while updating next5Shows', err)
+    }
+  },
+  start: true,
+  runOnInit: true
+})
+
+router.get('/current', (req, res) => res.status(200).send(currentShow))
+router.get('/next/5',  (req, res) => res.status(200).send(next5Shows))
 
 module.exports = router

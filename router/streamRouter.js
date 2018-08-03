@@ -1,25 +1,26 @@
 const express = require('express')
 const youtube = require('../api/youtube')
 const twitch = require('../api/twitch')
-const cacheManager = require('cache-manager')
+const CronJob = require('cron').CronJob
 
-const memoryCache = cacheManager.caching({ store: 'memory', max: 1, ttl: 300 })
 const router = express.Router()
 
-router.get('/', getStreamInfo)
+let stream = {}
 
-function getStreamInfo (req, res) {
-  memoryCache.wrap('stream_current', () => {
-    return getStreamData()
-  })
-    .then((data) => {
-      res.status(200).send(data)
-    })
-    .catch((e) => {
-      let errResult = { 'error': e }
-      res.status(500).send(errResult)
-    })
-}
+router.get('/', (req, res) => res.status(200).send(stream))
+
+let jobStream = new CronJob({
+  cronTime: '*/2 * * * *',
+  onTick: async () => {
+    try {
+      stream = await getStreamData()
+    } catch (err) {
+      console.error('Error while updating stream info', err)
+    }
+  },
+  start: true,
+  runOnInit: true
+})
 
 function getStreamData () {
   return new Promise(async (resolve, reject) => {
@@ -33,7 +34,6 @@ function getStreamData () {
 
       videoIdsResult.data.items.forEach((element) => {
         result.cameras.push(element.id.videoId)
-        console.log(element.id.videoId + ' ' + element.snippet.title)
       })
 
       let [youtubeViewerResult, twitchViewerResult] = await Promise.all([
