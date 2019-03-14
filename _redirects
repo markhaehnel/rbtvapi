@@ -1,2 +1,1 @@
-/schedule/*         https://rbtvapi-schedule-upcoming.netlify.com/.netlify/functions/api/schedule/:splat  200!
-/*                  /.netlify/functions/api/:splat  200!
+/*             /.netlify/functions/api/:splat           200!
