@@ -10,14 +10,16 @@ const api = axios.create({
   validateStatus: (status) => { return status === 200 }
 })
 
-const cacheControl = (req, res, next) => {
-  res.header('Cache-Control', 'public, max-age=300')
-  next()
+const getCacheControl = (seconds) => {
+  return (req, res, next) => {
+    res.header('Cache-Control', `public, max-age=${seconds}`)
+    next()
+  }
 }
 
 const router = express.Router()
 
-router.get('/stream', async (req, res) => {
+router.get('/stream', getCacheControl(1800), async (req, res) => {
   const { data } = await api.get('/frontend/init')
   res.status(200).json({
     cameras: [ data.data.streamInfo.youtubeToken ],
@@ -27,7 +29,7 @@ router.get('/stream', async (req, res) => {
   })
 })
 
-router.get('/schedule/current', async (req, res) => {
+router.get('/schedule/current', getCacheControl(300), async (req, res) => {
   const now = Math.floor(new Date() / 1000)
   const day = 86400
   const { data } = await api.get(`/schedule/normalized?startDay=${now - day}&endDay=${now + day}`)
@@ -57,7 +59,7 @@ router.get('/schedule/current', async (req, res) => {
   })
 })
 
-router.get('/schedule/next/5', async (req, res) => {
+router.get('/schedule/next/5', getCacheControl(600), async (req, res) => {
   const now = Math.floor(new Date() / 1000)
   const day = 86400
   const { data } = await api.get(`/schedule/normalized?startDay=${now - day}&endDay=${now + day}`)
@@ -92,7 +94,6 @@ router.get('/schedule/next/5', async (req, res) => {
   res.status(200).json({ schedule: upcomingShows })
 })
 
-app.use(cacheControl)
 app.use('/.netlify/functions/api', router)
 
 module.exports = app
