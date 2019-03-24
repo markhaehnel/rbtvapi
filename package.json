@@ -8,21 +8,18 @@
     "url": "https://gitlab.com/mhaehnel/rbtvapi.git"
   },
   "scripts": {
-    "build": "netlify-lambda build src",
-    "start": "node server-local.js",
+    "start": "node server.js",
     "lint": "standard | snazzy"
   },
   "author": "Mark Hähnel",
   "license": "MIT",
   "devDependencies": {
-    "axios": "^0.18.0",
-    "express": "^4.16.4",
-    "netlify-lambda": "^1.4.2",
-    "serverless-http": "^1.9.1",
     "snazzy": "^8.0.0",
     "standard": "^12.0.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.4",
     "moment": "^2.24.0"
   }
 }
