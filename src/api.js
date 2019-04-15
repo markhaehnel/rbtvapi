@@ -1,5 +1,4 @@
 const express = require('express')
-const serverless = require('serverless-http')
 const axios = require('axios')
 const moment = require('moment')
 
@@ -95,6 +94,4 @@ router.get('/schedule/next/5', getCacheControl(120), async (req, res) => {
 })
 
 app.use('/', router)
-
-module.exports = app
-module.exports.handler = serverless(app)
+app.listen(3000)
