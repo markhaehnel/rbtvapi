@@ -94,4 +94,4 @@ router.get('/schedule/next/5', getCacheControl(120), async (req, res) => {
 })
 
 app.use('/', router)
-app.listen(3000)
+module.exports = app
