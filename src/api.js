@@ -1,4 +1,5 @@
 const express = require('express')
+const serverless = require('serverless-http')
 const axios = require('axios')
 const moment = require('moment')
 
@@ -9,16 +10,16 @@ const api = axios.create({
   validateStatus: (status) => { return status === 200 }
 })
 
-const cacheControl = (req, res, next) => {
-    res.header('Cache-Control', 'public, max-age=120')
+const getCacheControl = (seconds) => {
+  return (req, res, next) => {
+    res.header('Cache-Control', `public, max-age=${seconds}`)
     next()
+  }
 }
 
 const router = express.Router()
 
-const DAY_IN_SECONDS = 86400
-
-router.get('/stream', async (req, res) => {
+router.get('/stream', getCacheControl(120), async (req, res) => {
   const { data } = await api.get('/frontend/init')
   res.status(200).json({
     cameras: [ data.data.streamInfo.youtubeToken ],
@@ -28,9 +29,10 @@ router.get('/stream', async (req, res) => {
   })
 })
 
-router.get('/schedule/current', async (req, res) => {
+router.get('/schedule/current', getCacheControl(120), async (req, res) => {
   const now = Math.floor(new Date() / 1000)
-  const { data } = await api.get(`/schedule/normalized?startDay=${now - DAY_IN_SECONDS}&endDay=${now + DAY_IN_SECONDS}`)
+  const range = 86400 * 2
+  const { data } = await api.get(`/schedule/normalized?startDay=${now - range}&endDay=${now + range}`)
 
   let allElements = []
   data.data.forEach(day => {
@@ -57,9 +59,10 @@ router.get('/schedule/current', async (req, res) => {
   })
 })
 
-router.get('/schedule/next/5', async (req, res) => {
+router.get('/schedule/next/5', getCacheControl(120), async (req, res) => {
   const now = Math.floor(new Date() / 1000)
-  const { data } = await api.get(`/schedule/normalized?startDay=${now - DAY_IN_SECONDS}&endDay=${now + DAY_IN_SECONDS}`)
+  const range = 86400 * 2
+  const { data } = await api.get(`/schedule/normalized?startDay=${now - range}&endDay=${now + range}`)
 
   let allElements = []
   data.data.forEach(day => {
@@ -91,14 +94,7 @@ router.get('/schedule/next/5', async (req, res) => {
   res.status(200).json({ schedule: upcomingShows })
 })
 
-router.use('*', (res, req) => {
-  req.status(404).json({
-    error: 'Endpoint not found.'
-  })
-})
-
-app.disable('x-powered-by')
-app.use(cacheControl)
-app.use(router)
+app.use('/', router)
 
 module.exports = app
+module.exports.handler = serverless(app)
